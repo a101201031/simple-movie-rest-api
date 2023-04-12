@@ -1,28 +1,27 @@
 module.exports = {
   env: {
-    browser: true,
     es2021: true,
     node: true,
   },
-  extends: ['plugin:react/recommended', 'airbnb', 'prettier'],
+  extends: ['airbnb-base', 'prettier'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: './tsconfig.json',
+    ecmaVersion: 'latest',
+    sourceType: 'module',
   },
   plugins: ['@typescript-eslint', 'prettier'],
   rules: {
     'prettier/prettier': 'error',
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/consistent-type-imports': 'warn',
-    'consistent-return': 'off',
-
     'import/prefer-default-export': 'off',
     'import/no-import-module-exports': 'off',
     'import/no-unresolved': [
       'error',
-        {
-          ignore: ['aws-lambda'],
-        },
+      {
+        ignore: ['aws-lambda'],
+      },
     ],
     'import/no-extraneous-dependencies': 'off',
     'no-unused-vars': 'off',
@@ -35,16 +34,17 @@ module.exports = {
       'ignorePackages',
       {
         js: 'never',
-        
+        jsx: 'never',
         ts: 'never',
-        
+        tsx: 'never',
       },
     ],
+    'consistent-return': 'off',
   },
   ignorePatterns: ['.eslintrc.js'],
   settings: {
     'import/parsers': {
-      '@typescript-eslint/parser': ['.ts',],
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
     },
     'import/resolver': {
       typescript: {
@@ -54,4 +54,3 @@ module.exports = {
     },
   },
 };
-
