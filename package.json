@@ -4,7 +4,7 @@
   "description": "movie rest api",
   "main": "serverless.ts",
   "scripts": {
-    "start": "./node_modules/serverless/bin/serverless.js offline",
+    "start": "./node_modules/serverless/bin/serverless.js offline --noPrependStageInUrl",
     "deploy:prod": "./node_modules/serverless/bin/serverless.js deploy -s prod"
   },
   "engines": {
