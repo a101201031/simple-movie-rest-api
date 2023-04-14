@@ -537,13 +537,6 @@
   dependencies:
     "@middy/util" "4.2.6"
 
-"@middy/http-error-handler@4.2.6":
-  version "4.2.6"
-  resolved "https://registry.yarnpkg.com/@middy/http-error-handler/-/http-error-handler-4.2.6.tgz#3922f698e53f5bea45313922888990b079308099"
-  integrity sha512-S7l6dc4Jkpidd3etVjmKWGDe8KZKV9dnL/KeqU5nrTtrOfya551IM5RrDy1yI1Ivxu0UT/ONlSV35hdEOeBwTw==
-  dependencies:
-    "@middy/util" "4.2.6"
-
 "@middy/http-json-body-parser@4.2.6":
   version "4.2.6"
   resolved "https://registry.yarnpkg.com/@middy/http-json-body-parser/-/http-json-body-parser-4.2.6.tgz#55320adda108b9af214bde09877d3124daf3dc2a"
