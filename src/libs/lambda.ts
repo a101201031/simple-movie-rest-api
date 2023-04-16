@@ -1,4 +1,5 @@
 import { errorHandler } from '@middleware/errorHandler';
+import { sqliteConnect } from '@middleware/sqliteConnect';
 import middy from '@middy/core';
 import middyCors from '@middy/http-cors';
 import middyJsonBodyParser from '@middy/http-json-body-parser';
@@ -17,8 +18,10 @@ export const middyfy = ({ handler, eventSchema }: MiddfyParams) =>
         .use(middyCors())
         .use(middyJsonBodyParser())
         .use(middyValidator({ eventSchema: transpileSchema(eventSchema) }))
+        .use(sqliteConnect())
         .use(errorHandler())
     : middy(handler)
         .use(middyCors())
         .use(middyJsonBodyParser())
+        .use(sqliteConnect())
         .use(errorHandler());

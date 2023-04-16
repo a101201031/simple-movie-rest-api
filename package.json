@@ -4,8 +4,7 @@
   "description": "movie rest api",
   "main": "serverless.ts",
   "scripts": {
-    "start": "./node_modules/serverless/bin/serverless.js offline --noPrependStageInUrl",
-    "deploy:prod": "./node_modules/serverless/bin/serverless.js deploy -s prod"
+    "start": "node ./node_modules/serverless/bin/serverless.js offline --noPrependStageInUrl"
   },
   "engines": {
     "node": ">=16.14.2"
@@ -15,6 +14,7 @@
     "@middy/http-cors": "4.2.6",
     "@middy/http-json-body-parser": "4.2.6",
     "@middy/validator": "4.2.6",
+    "eventemitter3": "^5.0.0",
     "http-errors": "2.0.0",
     "lodash": "4.17.21",
     "sqlite3": "^5.1.6"

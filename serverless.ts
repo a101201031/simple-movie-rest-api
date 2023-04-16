@@ -4,7 +4,7 @@ import handlers from 'src/handlers';
 const serverlessConfiguration: AWS = {
   service: 'ticketplace-test',
   frameworkVersion: '3',
-  plugins: ['serverless-offline', 'serverless-esbuild'],
+  plugins: ['serverless-esbuild', 'serverless-offline'],
   provider: {
     name: 'aws',
     runtime: 'nodejs16.x',
@@ -30,6 +30,8 @@ const serverlessConfiguration: AWS = {
       define: { 'require.resolve': undefined },
       platform: 'node',
       concurrency: 10,
+      external: ['sqlite3'],
+      packager: 'yarn',
     },
     'serverless-offline': {
       httpPort: 8000,
