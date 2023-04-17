@@ -8,6 +8,12 @@ jspm_packages
 # esbuild directories
 .esbuild
 
+# local database file
+*.db
+
+# code editor file
+.vscode/
+
 # misc
 .DS_Store
 .env
