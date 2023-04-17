@@ -13,4 +13,16 @@ export default {
       },
     ],
   },
+  init: {
+    handler: `${handlerPath(__dirname)}/functions/init.init`,
+    events: [
+      {
+        http: {
+          method: 'post',
+          path: 'init',
+          cors: true,
+        },
+      },
+    ],
+  },
 };
