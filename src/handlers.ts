@@ -25,4 +25,16 @@ export default {
       },
     ],
   },
+  movieListRead: {
+    handler: `${handlerPath(__dirname)}/functions/movie.movieListRead`,
+    events: [
+      {
+        http: {
+          method: 'get',
+          path: 'movies',
+          cors: true,
+        },
+      },
+    ],
+  },
 };
