@@ -5,6 +5,8 @@
       "@functions/*": ["src/functions/*"],
       "@libs/*": ["src/libs/*"],
       "@middleware/*": ["src/middleware/*"],
+      "@model/*": ["src/model/*"],
+      "@schema/*": ["src/schema/*"],
     }
   }
 }

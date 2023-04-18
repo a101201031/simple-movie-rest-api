@@ -1,15 +1,19 @@
 import { errorHandler } from '@middleware/errorHandler';
-import { sqliteConnect } from '@middleware/sqliteConnect';
+import { sqliteConnector } from '@middleware/sqliteConnector';
+import { validator } from '@middleware/validator';
 import middy from '@middy/core';
 import middyCors from '@middy/http-cors';
 import middyJsonBodyParser from '@middy/http-json-body-parser';
-import middyValidator from '@middy/validator';
-import { transpileSchema } from '@middy/validator/transpile';
 import type { Handler } from 'aws-lambda';
+import type { ObjectSchema } from 'yup';
 
 interface MiddfyParams {
   handler: Handler;
-  eventSchema?: object;
+  eventSchema?: {
+    bodyParameterSchema?: ObjectSchema<any>;
+    pathParameterSchema?: ObjectSchema<any>;
+    queryParameterSchema?: ObjectSchema<any>;
+  };
 }
 
 export const middyfy = ({ handler, eventSchema }: MiddfyParams) =>
@@ -17,11 +21,11 @@ export const middyfy = ({ handler, eventSchema }: MiddfyParams) =>
     ? middy(handler)
         .use(middyCors())
         .use(middyJsonBodyParser())
-        .use(middyValidator({ eventSchema: transpileSchema(eventSchema) }))
-        .use(sqliteConnect())
+        .use(validator({ eventSchema }))
+        .use(sqliteConnector())
         .use(errorHandler())
     : middy(handler)
         .use(middyCors())
         .use(middyJsonBodyParser())
-        .use(sqliteConnect())
+        .use(sqliteConnector())
         .use(errorHandler());

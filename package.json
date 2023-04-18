@@ -13,11 +13,11 @@
     "@middy/core": "4.2.6",
     "@middy/http-cors": "4.2.6",
     "@middy/http-json-body-parser": "4.2.6",
-    "@middy/validator": "4.2.6",
     "eventemitter3": "^5.0.0",
     "http-errors": "2.0.0",
     "lodash": "4.17.21",
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^5.1.6",
+    "yup": "^1.1.1"
   },
   "devDependencies": {
     "@serverless/typescript": "3.27.0",

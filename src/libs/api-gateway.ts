@@ -3,17 +3,28 @@ import type {
   APIGatewayProxyResult,
   Handler,
 } from 'aws-lambda';
-import type { FromSchema } from 'json-schema-to-ts';
+import type { InferType, ISchema } from 'yup';
 
-interface ValidatedAPIGatewayProxyEvent<T>
-  extends Omit<APIGatewayProxyEvent, 'body'> {
-  body: FromSchema<T>;
+export interface ValidatedAPIGatewayProxyEvent<
+  Body extends ISchema<any, any, any, any> = any,
+  QueryStringParameters extends ISchema<any, any, any, any> = any,
+> extends Omit<APIGatewayProxyEvent, 'body' | 'queryStringParameters'> {
+  body: InferType<Body>;
+  queryStringParameters: InferType<QueryStringParameters>;
 }
 
-export interface ValidatedEventAPIGatewayProxyEvent<T>
-  extends Handler<ValidatedAPIGatewayProxyEvent<T>, APIGatewayProxyResult> {}
+export interface ValidatedEventAPIGatewayProxyEvent<
+  Body extends ISchema<any, any, any, any> = any,
+  QueryStringParameters extends ISchema<any, any, any, any> = any,
+> extends Handler<
+    ValidatedAPIGatewayProxyEvent<Body, QueryStringParameters>,
+    APIGatewayProxyResult
+  > {}
 
-export const formatJSONResponse = (response: Record<string, unknown>) => ({
-  statusCode: 200,
+export const formatJSONResponse = (
+  response: Record<string, unknown>,
+  statusCode = 200,
+) => ({
+  statusCode,
   body: JSON.stringify(response),
 });
