@@ -24,7 +24,7 @@ export const errorHandler = (opts: OptionTypes = {}): middy.MiddlewareObj => {
     ...defaults,
     ...opts,
   };
-  const errorHandlerOnError: middy.MiddlewareFn = async (request) => {
+  const onError: middy.MiddlewareFn = async (request) => {
     let error = request.error as unknown as ApiErrorTypes;
     if (request.response !== undefined) return;
     if (typeof options.logger === 'function') {
@@ -37,6 +37,7 @@ export const errorHandler = (opts: OptionTypes = {}): middy.MiddlewareObj => {
       error = {
         statusCode: 500,
         code: options.fallbackCode,
+        message: options.fallbackMessage,
         expose: true,
       };
     }
@@ -62,6 +63,6 @@ export const errorHandler = (opts: OptionTypes = {}): middy.MiddlewareObj => {
     }
   };
   return {
-    onError: errorHandlerOnError,
+    onError,
   };
 };

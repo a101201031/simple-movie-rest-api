@@ -1,7 +1,7 @@
 import { databaseConnector } from '@libs/database';
 import type middy from '@middy/core';
 
-export const sqliteConnect = (): middy.MiddlewareObj => {
+export const sqliteConnector = (): middy.MiddlewareObj => {
   const before: middy.MiddlewareFn = async () => {
     await databaseConnector.isConnected();
   };
