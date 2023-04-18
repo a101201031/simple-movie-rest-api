@@ -20,7 +20,11 @@ export const validator = ({
     queryParameterSchema,
   },
 }: OptionTypes): middy.MiddlewareObj<
-  ValidatedAPIGatewayProxyEvent<any, typeof movieListReadSchema>
+  ValidatedAPIGatewayProxyEvent<
+    typeof bodyParameterSchema | any,
+    typeof pathParameterSchema | any,
+    typeof queryParameterSchema | any
+  >
 > => {
   const before: middy.MiddlewareFn<
     ValidatedAPIGatewayProxyEvent<any, typeof movieListReadSchema>
