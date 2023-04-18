@@ -37,4 +37,16 @@ export default {
       },
     ],
   },
+  movieRead: {
+    handler: `${handlerPath(__dirname)}/functions/movie.movieRead`,
+    events: [
+      {
+        http: {
+          method: 'get',
+          path: 'movies/{movieId}',
+          cors: true,
+        },
+      },
+    ],
+  },
 };

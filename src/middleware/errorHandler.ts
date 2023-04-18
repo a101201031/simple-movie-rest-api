@@ -52,7 +52,6 @@ export const errorHandler = (opts: OptionTypes = {}): middy.MiddlewareObj => {
             code,
             message,
           },
-          success: false,
         }),
         headers: {
           ...headers,

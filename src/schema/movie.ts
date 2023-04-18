@@ -27,3 +27,7 @@ export const movieListReadSchema = object({
   sortBy: string().oneOf(moiveOption).default('id'),
   orderBy: string().oneOf(['asc', 'desc']).default('asc'),
 });
+
+export const movieReadSchema = object({
+  movieId: string(),
+});
