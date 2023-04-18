@@ -61,7 +61,7 @@ export const fakeData = {
       person_name: '조수현',
     },
   ],
-  movieActor: [
+  movieActors: [
     {
       movie_id: 'm1',
       actor_type: 'main',

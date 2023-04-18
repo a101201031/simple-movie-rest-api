@@ -53,8 +53,8 @@ const initFunction = async (): Promise<APIGatewayProxyResult> => {
 
   try {
     await Promise.all(
-      map(['movie', 'movie_genre', 'movie_crew', 'movie_actor'], (v) => {
-        cursorRun(db, {
+      map(['movie', 'movie_genre', 'movie_crew', 'movie_actor'], async (v) => {
+        await cursorRun(db, {
           sql: `
             DELETE FROM ${v}
           `,
@@ -128,8 +128,8 @@ const initFunction = async (): Promise<APIGatewayProxyResult> => {
       }),
     );
     await Promise.all(
-      map(fakeData.movieActor, (v) => {
-        cursorRun(db, {
+      map(fakeData.movieActors, async (v) => {
+        await cursorRun(db, {
           sql: `
             INSERT INTO movie_actor
             (

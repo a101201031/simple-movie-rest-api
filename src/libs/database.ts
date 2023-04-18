@@ -73,7 +73,10 @@ interface SqliteError {
 }
 
 export const isSqliteError = (err: unknown): err is SqliteError =>
-  !!isObject(err) && 'code' in err && err.code === 'SQLITE_ERROR';
+  !!isObject(err) &&
+  'code' in err &&
+  typeof err.code === 'string' &&
+  err.code.startsWith('SQLITE');
 
 export const cursorRun = async (
   cursor: Database,
