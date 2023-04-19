@@ -416,6 +416,43 @@ const movieUpdateFunction: ValidatedEventAPIGatewayProxyEvent<
   });
 };
 
+const movieDeleteFunction: ValidatedEventAPIGatewayProxyEvent<
+  ISchemaAny,
+  typeof moviePathSchema,
+  ISchemaAny
+> = async (event) => {
+  const db = await databaseConnector.getCursor();
+  const { movieId } = event.pathParameters;
+
+  await selectMovie(db, movieId);
+
+  try {
+    await cursorRun(db, { sql: `BEGIN` });
+    await cursorRun(db, {
+      sql: `DELETE FROM movie WHERE id = ?`,
+      values: [movieId],
+    });
+    await cursorRun(db, {
+      sql: `DELETE FROM movie_genre WHERE movie_id = ?`,
+      values: [movieId],
+    });
+    await cursorRun(db, {
+      sql: `DELETE FROM movie_crew WHERE movie_id = ?`,
+      values: [movieId],
+    });
+    await cursorRun(db, {
+      sql: `DELETE FROM movie_actor WHERE movie_id = ?`,
+      values: [movieId],
+    });
+    await cursorRun(db, { sql: `COMMIT` });
+  } catch (err) {
+    await cursorRun(db, { sql: `ROLLBACK` });
+    throw err;
+  }
+
+  return formatJSONResponse({}, 204);
+};
+
 export const movieListRead = middyfy({
   handler: movieListReadFunction,
   eventSchema: { queryParameterSchema: movieListReadQuerySchema },
@@ -437,4 +474,9 @@ export const movieUpdate = middyfy({
     bodyParameterSchema: movieUpdateBodySchema,
     pathParameterSchema: moviePathSchema,
   },
+});
+
+export const movieDelete = middyfy({
+  handler: movieDeleteFunction,
+  eventSchema: { pathParameterSchema: moviePathSchema },
 });

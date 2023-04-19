@@ -73,4 +73,16 @@ export default {
       },
     ],
   },
+  movieDelete: {
+    handler: `${handlerPath(__dirname)}/functions/movie.movieDelete`,
+    events: [
+      {
+        http: {
+          method: 'delete',
+          path: 'movies/{movieId}',
+          cors: true,
+        },
+      },
+    ],
+  },
 };
