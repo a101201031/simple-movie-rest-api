@@ -61,4 +61,16 @@ export default {
       },
     ],
   },
+  movieUpdate: {
+    handler: `${handlerPath(__dirname)}/functions/movie.movieUpdate`,
+    events: [
+      {
+        http: {
+          method: 'put',
+          path: 'movies/{movieId}',
+          cors: true,
+        },
+      },
+    ],
+  },
 };

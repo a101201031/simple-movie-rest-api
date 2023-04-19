@@ -4,7 +4,18 @@ import type {
   MovieGenreModel,
   MovieModel,
 } from '@model/movie';
+import map from 'lodash/map';
 import { array, date, number, object, string } from 'yup';
+
+const uniqueTest = {
+  name: 'unique',
+  message: ({ path }: { path: string }) => `${path} must be unique`,
+  test: (arr: any[] | undefined) =>
+    !arr
+      ? true
+      : arr.length ===
+        new Map(map(arr, (item) => [JSON.stringify(item), null])).size,
+};
 
 const moiveOption: Array<keyof MovieModel> = [
   'id',
@@ -29,7 +40,7 @@ const movieCrewTypes: MovieCrewModel['type'][] = ['director'];
 const movieActorTypes: MovieActorModel['type'][] = ['main', 'sub'];
 
 export const moviePathSchema = object({
-  movieId: string(),
+  movieId: string().required(),
 });
 
 export const movieCreateBodySchema = object({
@@ -43,6 +54,7 @@ export const movieCreateBodySchema = object({
         type: string().oneOf(movieGenreTypes).required(),
       }),
     )
+    .test(uniqueTest.name, uniqueTest.message, uniqueTest.test)
     .required(),
   crews: array()
     .of(
@@ -51,6 +63,7 @@ export const movieCreateBodySchema = object({
         personName: string().required(),
       }),
     )
+    .test(uniqueTest.name, uniqueTest.message, uniqueTest.test)
     .required(),
   actors: array()
     .of(
@@ -60,6 +73,7 @@ export const movieCreateBodySchema = object({
         character: string().required(),
       }),
     )
+    .test(uniqueTest.name, uniqueTest.message, uniqueTest.test)
     .required(),
 }).required();
 
@@ -79,3 +93,34 @@ export const movieListReadQuerySchema = object({
   sortBy: string().oneOf(moiveOption).default('id'),
   orderBy: string().oneOf(['asc', 'desc']).default('asc'),
 });
+
+export const movieUpdateBodySchema = object({
+  title: string().trim(),
+  rating: number().min(0).max(100),
+  releasedAt: date().min(new Date('1900-01-01T00:00:00Z')),
+  runningTime: number().min(0).max(864000000),
+  genres: array()
+    .of(
+      object({
+        type: string().oneOf(movieGenreTypes).required(),
+      }),
+    )
+    .test(uniqueTest.name, uniqueTest.message, uniqueTest.test),
+  crews: array()
+    .of(
+      object({
+        type: string().oneOf(movieCrewTypes).required(),
+        personName: string().required(),
+      }),
+    )
+    .test(uniqueTest.name, uniqueTest.message, uniqueTest.test),
+  actors: array()
+    .of(
+      object({
+        type: string().oneOf(movieActorTypes).required(),
+        personName: string().required(),
+        character: string().required(),
+      }),
+    )
+    .test(uniqueTest.name, uniqueTest.message, uniqueTest.test),
+}).required();
