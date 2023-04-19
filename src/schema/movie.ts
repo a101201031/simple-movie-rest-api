@@ -1,5 +1,10 @@
-import type { MovieModel } from '@model/movie';
-import { date, number, object, string } from 'yup';
+import type {
+  MovieActorModel,
+  MovieCrewModel,
+  MovieGenreModel,
+  MovieModel,
+} from '@model/movie';
+import { array, date, number, object, string } from 'yup';
 
 type MovieOption = keyof Omit<MovieModel, 'movieId'> | 'id';
 
@@ -10,6 +15,20 @@ const moiveOption: MovieOption[] = [
   'releasedAt',
   'runningTime',
 ];
+
+const movieGenreTypes: MovieGenreModel['genreType'][] = [
+  'action',
+  'comedy',
+  'horror',
+  'musical',
+  'horror',
+  'romance',
+  'war',
+];
+
+const movieCrewTypes: MovieCrewModel['crewType'][] = ['director'];
+
+const movieActorTypes: MovieActorModel['actorType'][] = ['main', 'sub'];
 
 export const movieListReadSchema = object({
   title: string().default(''),
@@ -31,3 +50,34 @@ export const movieListReadSchema = object({
 export const movieReadSchema = object({
   movieId: string(),
 });
+
+export const movieCreateSchema = object({
+  title: string().required().trim(),
+  rating: number().min(0).max(100).default(0),
+  releasedAt: date().required(),
+  runningTime: number().required().min(0).max(864000000),
+  genres: array()
+    .of(
+      object({
+        type: string().oneOf(movieGenreTypes).required(),
+      }),
+    )
+    .required(),
+  crews: array()
+    .of(
+      object({
+        type: string().oneOf(movieCrewTypes).required(),
+        personName: string().required(),
+      }),
+    )
+    .required(),
+  actors: array()
+    .of(
+      object({
+        type: string().oneOf(movieActorTypes).required(),
+        personName: string().required(),
+        character: string().required(),
+      }),
+    )
+    .required(),
+}).required();

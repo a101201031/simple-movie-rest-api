@@ -8,18 +8,25 @@ export interface MovieModel {
 
 export interface MovieGenreModel {
   movieId: string;
-  genreType: string;
+  genreType:
+    | 'action'
+    | 'horror'
+    | 'musical'
+    | 'noir'
+    | 'romance'
+    | 'comedy'
+    | 'war';
 }
 
 export interface MovieCrewModel {
   movieId: string;
-  crewType: string;
+  crewType: 'director';
   personName: string;
 }
 
 export interface MovieActorModel {
   movieId: string;
-  actorType: string;
+  actorType: 'main' | 'sub';
   personName: string;
   character: string;
 }

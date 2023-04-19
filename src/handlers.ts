@@ -37,6 +37,18 @@ export default {
       },
     ],
   },
+  movieCreate: {
+    handler: `${handlerPath(__dirname)}/functions/movie.movieCreate`,
+    events: [
+      {
+        http: {
+          method: 'post',
+          path: 'movies',
+          cors: true,
+        },
+      },
+    ],
+  },
   movieRead: {
     handler: `${handlerPath(__dirname)}/functions/movie.movieRead`,
     events: [
