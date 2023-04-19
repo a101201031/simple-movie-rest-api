@@ -5,10 +5,12 @@ import type {
 } from 'aws-lambda';
 import type { InferType, ISchema } from 'yup';
 
+export interface ISchemaAny extends ISchema<any, any, any, any> {}
+
 export interface ValidatedAPIGatewayProxyEvent<
-  Body extends ISchema<any, any, any, any> = any,
-  PathParameters extends ISchema<any, any, any, any> = any,
-  QueryStringParameters extends ISchema<any, any, any, any> = any,
+  Body extends ISchema<any, any, any, any> = ISchemaAny,
+  PathParameters extends ISchema<any, any, any, any> = ISchemaAny,
+  QueryStringParameters extends ISchema<any, any, any, any> = ISchemaAny,
 > extends Omit<
     APIGatewayProxyEvent,
     'body' | 'queryStringParameters' | 'pathParameters'
@@ -19,9 +21,9 @@ export interface ValidatedAPIGatewayProxyEvent<
 }
 
 export interface ValidatedEventAPIGatewayProxyEvent<
-  Body extends ISchema<any, any, any, any> = any,
-  PathParameters extends ISchema<any, any, any, any> = any,
-  QueryStringParameters extends ISchema<any, any, any, any> = any,
+  Body extends ISchema<any, any, any, any> = ISchemaAny,
+  PathParameters extends ISchema<any, any, any, any> = ISchemaAny,
+  QueryStringParameters extends ISchema<any, any, any, any> = ISchemaAny,
 > extends Handler<
     ValidatedAPIGatewayProxyEvent<Body, PathParameters, QueryStringParameters>,
     APIGatewayProxyResult
