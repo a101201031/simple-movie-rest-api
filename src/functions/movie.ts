@@ -12,9 +12,9 @@ import type {
   MovieModel,
 } from '@model/movie';
 import {
-  movieCreateSchema,
-  movieListReadSchema,
-  movieReadSchema,
+  movieCreateBodySchema,
+  movieListReadQuerySchema,
+  moviePathSchema,
 } from '@schema/movie';
 import cuid from 'cuid';
 import createHttpError from 'http-errors';
@@ -27,7 +27,7 @@ const selectMovie = async (db: Database, movieId: string) => {
   >(db, {
     sql: `
       SELECT
-        movie_id AS id,
+        id,
         title,
         rating,
         released_at AS releasedAt,
@@ -49,7 +49,7 @@ const selectMovie = async (db: Database, movieId: string) => {
   const movieGenreSelect = await cursorAll<Array<MovieGenreModel>>(db, {
     sql: `
       SELECT
-        genre_type AS genreType
+        type
       FROM movie_genre
       WHERE
         movie_id = ?
@@ -60,7 +60,7 @@ const selectMovie = async (db: Database, movieId: string) => {
   const movieCrewSelect = await cursorAll<Array<MovieCrewModel>>(db, {
     sql: `
       SELECT
-        crew_type AS crewType,
+        type,
         person_name AS personName
       FROM movie_crew
       WHERE
@@ -72,7 +72,7 @@ const selectMovie = async (db: Database, movieId: string) => {
   const movieActorSelect = await cursorAll<Array<MovieActorModel>>(db, {
     sql: `
       SELECT
-        actor_type AS actorType,
+        type,
         person_name AS personName,
         character
       FROM movie_actor
@@ -94,7 +94,7 @@ const selectMovie = async (db: Database, movieId: string) => {
 const movieListReadFunction: ValidatedEventAPIGatewayProxyEvent<
   ISchemaAny,
   ISchemaAny,
-  typeof movieListReadSchema
+  typeof movieListReadQuerySchema
 > = async (event) => {
   const db = await databaseConnector.getCursor();
 
@@ -116,7 +116,7 @@ const movieListReadFunction: ValidatedEventAPIGatewayProxyEvent<
   const movieSelect = await cursorAll(db, {
     sql: `
       SELECT
-        movie_id AS id,
+        id,
         title,
         rating,
         released_at AS releasedAt,
@@ -163,7 +163,7 @@ const movieListReadFunction: ValidatedEventAPIGatewayProxyEvent<
 };
 
 const movieCreateFunction: ValidatedEventAPIGatewayProxyEvent<
-  typeof movieCreateSchema
+  typeof movieCreateBodySchema
 > = async (event) => {
   const db = await databaseConnector.getCursor();
   const { title, rating, releasedAt, runningTime, genres, crews, actors } =
@@ -176,7 +176,7 @@ const movieCreateFunction: ValidatedEventAPIGatewayProxyEvent<
       sql: `
         INSERT INTO movie
         (
-          movie_id,
+          id,
           title,
           rating,
           released_at,
@@ -195,7 +195,7 @@ const movieCreateFunction: ValidatedEventAPIGatewayProxyEvent<
             INSERT INTO movie_genre
             (
               movie_id,
-              genre_type
+              type
             ) values
             (
               ?, ?
@@ -212,7 +212,7 @@ const movieCreateFunction: ValidatedEventAPIGatewayProxyEvent<
             INSERT INTO movie_crew
             (
               movie_id,
-              crew_type,
+              type,
               person_name
             ) values
             (
@@ -230,7 +230,7 @@ const movieCreateFunction: ValidatedEventAPIGatewayProxyEvent<
             INSERT INTO movie_actor
             (
               movie_id,
-              actor_type,
+              type,
               person_name,
               character
             ) values
@@ -257,7 +257,7 @@ const movieCreateFunction: ValidatedEventAPIGatewayProxyEvent<
 const movieReadFunction: ValidatedEventAPIGatewayProxyEvent<
   ISchemaAny,
   ISchemaAny,
-  typeof movieReadSchema
+  typeof moviePathSchema
 > = async (event) => {
   const db = await databaseConnector.getCursor();
   const { movieId } = event.pathParameters;
@@ -270,15 +270,15 @@ const movieReadFunction: ValidatedEventAPIGatewayProxyEvent<
 
 export const movieListRead = middyfy({
   handler: movieListReadFunction,
-  eventSchema: { queryParameterSchema: movieListReadSchema },
+  eventSchema: { queryParameterSchema: movieListReadQuerySchema },
 });
 
 export const movieCreate = middyfy({
   handler: movieCreateFunction,
-  eventSchema: { bodyParameterSchema: movieCreateSchema },
+  eventSchema: { bodyParameterSchema: movieCreateBodySchema },
 });
 
 export const movieRead = middyfy({
   handler: movieReadFunction,
-  eventSchema: { pathParameterSchema: movieReadSchema },
+  eventSchema: { pathParameterSchema: moviePathSchema },
 });

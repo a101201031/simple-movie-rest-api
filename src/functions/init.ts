@@ -12,7 +12,7 @@ const initFunction = async (): Promise<APIGatewayProxyResult> => {
     sql: `
       CREATE TABLE IF NOT EXISTS movie
       (
-        movie_id TEXT PRIMARY KEY,
+        id TEXT PRIMARY KEY,
         title TEXT,
         rating INTEGER,
         released_at TEXT,
@@ -25,7 +25,7 @@ const initFunction = async (): Promise<APIGatewayProxyResult> => {
       CREATE TABLE IF NOT EXISTS movie_genre
       (
         movie_id TEXT NOT NULL,
-        genre_type TEXT
+        type TEXT
       ) 
     `,
   });
@@ -34,7 +34,7 @@ const initFunction = async (): Promise<APIGatewayProxyResult> => {
       CREATE TABLE IF NOT EXISTS movie_crew
       (
         movie_id TEXT NOT NULL,
-        crew_type TEXT,
+        type TEXT,
         person_name TEXT
       ) 
     `,
@@ -44,7 +44,7 @@ const initFunction = async (): Promise<APIGatewayProxyResult> => {
       CREATE TABLE IF NOT EXISTS movie_actor
       (
         movie_id TEXT NOT NULL,
-        actor_type TEXT,
+        type TEXT,
         person_name TEXT,
         character TEXT
       ) 
@@ -72,7 +72,7 @@ const initFunction = async (): Promise<APIGatewayProxyResult> => {
           sql: `
             INSERT INTO movie
             (
-              movie_id,
+              id,
               title,
               rating,
               released_at,
@@ -82,13 +82,7 @@ const initFunction = async (): Promise<APIGatewayProxyResult> => {
               ?, ?, ?, ?, ?
             )
           `,
-          values: [
-            v.movie_id,
-            v.title,
-            v.rating,
-            v.released_at,
-            v.running_time,
-          ],
+          values: [v.id, v.title, v.rating, v.releasedAt, v.runningTime],
         });
       }),
     );
@@ -99,13 +93,13 @@ const initFunction = async (): Promise<APIGatewayProxyResult> => {
             INSERT INTO movie_genre
             (
               movie_id,
-              genre_type
+              type
             ) values
             (
               ?, ?
             )
           `,
-          values: [v.movie_id, v.genre_type],
+          values: [v.movieId, v.type],
         });
       }),
     );
@@ -116,14 +110,14 @@ const initFunction = async (): Promise<APIGatewayProxyResult> => {
             INSERT INTO movie_crew
             (
               movie_id,
-              crew_type,
+              type,
               person_name
             ) values
             (
               ?, ?, ?
             )
           `,
-          values: [v.movie_id, v.crew_type, v.person_name],
+          values: [v.movieId, v.type, v.personName],
         });
       }),
     );
@@ -134,7 +128,7 @@ const initFunction = async (): Promise<APIGatewayProxyResult> => {
             INSERT INTO movie_actor
             (
               movie_id,
-              actor_type,
+              type,
               person_name,
               character
             ) values
@@ -142,7 +136,7 @@ const initFunction = async (): Promise<APIGatewayProxyResult> => {
               ?, ?, ?, ?
             )
           `,
-          values: [v.movie_id, v.actor_type, v.person_name, v.character],
+          values: [v.movieId, v.type, v.personName, v.character],
         });
       }),
     );
