@@ -1,47 +1,47 @@
-import type { ValidatedAPIGatewayProxyEvent } from '@libs/api-gateway';
 import type middy from '@middy/core';
-import { movieListReadSchema } from '@schema/movie';
 import createHttpError from 'http-errors';
 import type { ObjectSchema } from 'yup';
 import { ValidationError } from 'yup';
 
 interface OptionTypes {
-  eventSchema: {
+  eventSchema?: {
     bodyParameterSchema?: ObjectSchema<any>;
     pathParameterSchema?: ObjectSchema<any>;
     queryParameterSchema?: ObjectSchema<any>;
   };
 }
 
-export const validator = ({
+const defaults: OptionTypes = {
   eventSchema: {
-    bodyParameterSchema,
-    pathParameterSchema,
-    queryParameterSchema,
+    bodyParameterSchema: undefined,
+    pathParameterSchema: undefined,
+    queryParameterSchema: undefined,
   },
-}: OptionTypes): middy.MiddlewareObj<
-  ValidatedAPIGatewayProxyEvent<
-    typeof bodyParameterSchema | any,
-    typeof pathParameterSchema | any,
-    typeof queryParameterSchema | any
-  >
-> => {
-  const before: middy.MiddlewareFn<
-    ValidatedAPIGatewayProxyEvent<any, typeof movieListReadSchema>
-  > = async (request) => {
+};
+
+export const validator = (opts: OptionTypes = {}): middy.MiddlewareObj => {
+  const options = {
+    ...defaults,
+    ...opts,
+  };
+
+  const before: middy.MiddlewareFn = async (request) => {
+    const { eventSchema } = options;
     try {
-      if (bodyParameterSchema) {
-        const validateBody = await bodyParameterSchema.validate(
+      if (eventSchema?.bodyParameterSchema) {
+        const validateBody = await eventSchema.bodyParameterSchema.validate(
           request.event.body ?? {},
         );
         request.event.body = validateBody;
       }
-      if (pathParameterSchema) {
-        await pathParameterSchema.validate(request.event.pathParameters ?? {});
+      if (eventSchema?.pathParameterSchema) {
+        await eventSchema.pathParameterSchema.validate(
+          request.event.pathParameters ?? {},
+        );
       }
-      if (queryParameterSchema) {
+      if (eventSchema?.queryParameterSchema) {
         const validateQueryStringParameters =
-          await movieListReadSchema.validate(
+          await eventSchema.queryParameterSchema.validate(
             request.event.queryStringParameters ?? {},
           );
         request.event.queryStringParameters = validateQueryStringParameters;
