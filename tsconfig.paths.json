@@ -7,6 +7,7 @@
       "@middleware/*": ["src/middleware/*"],
       "@model/*": ["src/model/*"],
       "@schema/*": ["src/schema/*"],
+      "@query/*": ["src/query/*"],
     }
   }
 }

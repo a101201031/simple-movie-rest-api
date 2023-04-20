@@ -1,4 +1,16 @@
-export const fakeData = {
+import type {
+  MovieActorModel,
+  MovieCrewModel,
+  MovieGenreModel,
+  MovieModel,
+} from '@model/movie';
+
+export const fakeData: {
+  movies?: MovieModel[];
+  movieGenres?: MovieGenreModel[];
+  movieCrews?: MovieCrewModel[];
+  movieActors?: MovieActorModel[];
+} = {
   movies: [
     {
       id: 'm1',
