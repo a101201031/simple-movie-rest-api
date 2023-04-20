@@ -1,6 +1,7 @@
 # Junior back-end assignment - movie api
 
 ***Movie CRUD API***
+
 영화 정보 생성/조회/수정/삭제 API
 
 ## 빌드
@@ -16,6 +17,7 @@
 ## 테스트
 
 api 문서: <https://documenter.getpostman.com/view/14087354/2s93Y2Thew#8e7f5876-b391-41db-a9df-76b6ef87865c>
+
 api 문서를 참고하여 각 api에 요청을 보내 테스트합니다.
 
 기본 API 경로: <http://localhost:8000/api/v1>
