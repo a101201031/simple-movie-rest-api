@@ -1,65 +1,59 @@
 import type middy from '@middy/core';
 import { normalizeHttpResponse } from '@middy/util';
-import type createHttpError from 'http-errors';
+import createHttpError, { HttpError } from 'http-errors';
 
-interface ApiErrorTypes extends Partial<createHttpError.HttpError> {
+interface Error extends Partial<HttpError> {
   code: string;
-  headers?: any;
 }
 
 interface OptionTypes {
-  logger?: ((error: any) => void) | boolean;
-  fallbackCode?: string;
-  fallbackMessage?: string;
+  logger: ((error: any) => void) | boolean;
+  fallbackCode: string;
+  fallbackMessage: string;
 }
 
-const defaults: OptionTypes = {
+const defaults = {
   logger: console.error,
   fallbackCode: 'internal_server_error',
   fallbackMessage: 'internal server error',
 };
 
-export const errorHandler = (opts: OptionTypes = {}): middy.MiddlewareObj => {
-  const options = {
-    ...defaults,
-    ...opts,
-  };
+export const errorHandler = (
+  options: OptionTypes = defaults,
+): middy.MiddlewareObj => {
   const onError: middy.MiddlewareFn = async (request) => {
-    let error = request.error as unknown as ApiErrorTypes;
     if (request.response !== undefined) return;
     if (typeof options.logger === 'function') {
-      options.logger(error);
+      options.logger(request.error);
     }
-    if (error.statusCode && error.expose === undefined) {
-      error.expose = error.statusCode < 500;
+
+    if (request.error instanceof HttpError) {
+      if (request.error.statusCode === 500) {
+        request.error.statusCode = 500;
+        request.error.code = options.fallbackCode;
+        request.error.message = options.fallbackMessage;
+      }
+    } else {
+      request.error = createHttpError(500);
+      (request.error as any).code = options.fallbackCode;
+      request.error.message = options.fallbackMessage;
     }
-    if (options.fallbackCode && (!error.statusCode || !error.expose)) {
-      error = {
-        statusCode: 500,
-        code: options.fallbackCode,
-        message: options.fallbackMessage,
-        expose: true,
-      };
-    }
-    if (error.expose) {
-      normalizeHttpResponse(request);
-      const { statusCode, code, message, headers } = error;
-      request.response = {
-        ...request.response,
-        statusCode,
-        body: JSON.stringify({
-          error: {
-            code,
-            message,
-          },
-        }),
-        headers: {
-          ...headers,
-          ...request.response.headers,
-          'Content-Type': 'application/json',
+
+    normalizeHttpResponse(request);
+    const { statusCode, code, message } = request.error as Error;
+    request.response = {
+      statusCode,
+      body: JSON.stringify({
+        error: {
+          code,
+          message,
         },
-      };
-    }
+      }),
+      headers: {
+        ...request.response.headers,
+        'Content-Type': 'application/json',
+      },
+    };
   };
   return {
     onError,

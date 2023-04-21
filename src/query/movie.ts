@@ -1,3 +1,6 @@
+import type { movieCreateBodySchema } from '@functions/movieCreate';
+import type { movieListReadQuerySchema } from '@functions/movieListRead';
+import type { movieUpdateBodySchema } from '@functions/movieUpdate';
 import { cursorAll, cursorRun, databaseConnector } from '@libs/database';
 import type {
   MovieActorModel,
@@ -5,12 +8,6 @@ import type {
   MovieGenreModel,
   MovieModel,
 } from '@model/movie';
-import type {
-  movieCreateBodySchema,
-  movieListReadQuerySchema,
-  movieUpdateBodySchema,
-} from '@schema/movie';
-import createHttpError from 'http-errors';
 import forEach from 'lodash/forEach';
 import isEqual from 'lodash/isEqual';
 import join from 'lodash/join';
@@ -48,12 +45,8 @@ export const selectMovie = async ({ movieId }: { movieId: string }) => {
     `,
     values: [movieId],
   });
-
   if (!movieSelect.length) {
-    throw createHttpError(404, {
-      code: 'entitiy_not_found',
-      message: 'movie is not found.',
-    });
+    throw new Error('movie not found');
   }
 
   const movieGenreSelect = await cursorAll<Array<MovieGenreModel>>(db, {

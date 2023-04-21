@@ -30,7 +30,7 @@ export interface ValidatedEventAPIGatewayProxyEvent<
   > {}
 
 export const formatJSONResponse = (
-  response: Record<string, unknown>,
+  response: Record<string, unknown> = {},
   statusCode = 200,
 ) => ({
   statusCode,

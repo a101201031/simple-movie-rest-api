@@ -14,7 +14,7 @@ export default {
     ],
   },
   movieListRead: {
-    handler: `${handlerPath(__dirname)}/functions/movie.movieListRead`,
+    handler: `${handlerPath(__dirname)}/functions/movieListRead.movieListRead`,
     events: [
       {
         http: {
@@ -26,7 +26,7 @@ export default {
     ],
   },
   movieCreate: {
-    handler: `${handlerPath(__dirname)}/functions/movie.movieCreate`,
+    handler: `${handlerPath(__dirname)}/functions/movieCreate.movieCreate`,
     events: [
       {
         http: {
@@ -38,7 +38,7 @@ export default {
     ],
   },
   movieRead: {
-    handler: `${handlerPath(__dirname)}/functions/movie.movieRead`,
+    handler: `${handlerPath(__dirname)}/functions/movieRead.movieRead`,
     events: [
       {
         http: {
@@ -50,7 +50,7 @@ export default {
     ],
   },
   movieUpdate: {
-    handler: `${handlerPath(__dirname)}/functions/movie.movieUpdate`,
+    handler: `${handlerPath(__dirname)}/functions/movieUpdate.movieUpdate`,
     events: [
       {
         http: {
@@ -62,7 +62,7 @@ export default {
     ],
   },
   movieDelete: {
-    handler: `${handlerPath(__dirname)}/functions/movie.movieDelete`,
+    handler: `${handlerPath(__dirname)}/functions/movieDelete.movieDelete`,
     events: [
       {
         http: {
