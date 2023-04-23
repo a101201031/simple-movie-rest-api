@@ -2,7 +2,7 @@ import { EventEmitter } from 'eventemitter3';
 import isObject from 'lodash/isObject';
 import type { Database } from 'sqlite3';
 import sqlite3 from 'sqlite3';
-import { handlerPath } from './handler-resolver';
+import { handlerPath } from './handlerResolver';
 
 class DatabaseConnector {
   public readonly database: Database;

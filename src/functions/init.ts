@@ -1,4 +1,4 @@
-import { formatJSONResponse } from '@libs/api-gateway';
+import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import type {
   MovieActorModel,

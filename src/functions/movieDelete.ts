@@ -1,17 +1,12 @@
 import type {
   ISchemaAny,
   ValidatedEventAPIGatewayProxyEvent,
-} from '@libs/api-gateway';
-import { formatJSONResponse } from '@libs/api-gateway';
+} from '@libs/apiGateway';
+import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-import { deleteMovie, selectMovie } from '@query/movie';
+import { deleteMovie, moviePathSchema, selectMovie } from '@query/movie';
 import createHttpError from 'http-errors';
 import isObject from 'lodash/isObject';
-import { object, string } from 'yup';
-
-const moviePathSchema = object({
-  movieId: string().required(),
-});
 
 const movieDeleteFunction: ValidatedEventAPIGatewayProxyEvent<
   ISchemaAny,
