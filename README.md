@@ -7,12 +7,15 @@
 ## 빌드
 
 - 터미널에서 `git clone https://github.com/a101201031/ticketplace-test [디렉터리명]`으로 프로젝트 파일을 다운받습니다.
-- `cd [디렉터리명]` 후 `nvm install`으로 node version을 동일하게 합니다.
+- `nvm`을 사용중일 경우
+  - `cd [디렉터리명]` 후 `nvm install`으로 node version을 동일하게 합니다.
+- `nvm`을 사용하지 않을 경우
+  - `.nvmrc`에 명시된 `node.js` 버전을 설치합니다.
 - `yarn`으로 dependencies를 설치합니다.
 
 ## 실행
 
-- `yarn start`을 실행합니다.
+- `yarn start`으로 실행합니다.
 
 ## 테스트
 
@@ -33,6 +36,7 @@ api 문서를 참고하여 각 api에 요청을 보내 테스트합니다.
 
 ## 사용 stack
 
+- node.js
 - typescript
 - serverless framework, middy
 - sqlite3
@@ -44,32 +48,34 @@ api 문서를 참고하여 각 api에 요청을 보내 테스트합니다.
 
 ```
 .
-├── db                           # sqlite 데이터베이스 파일 생성 경로
+├── db                          # sqlite 데이터베이스 파일 생성 경로
 │   └── readme.md
 ├── src
-│   ├── functions                # resource별 요청 처리 함수
+│   ├── functions               # 요청 처리 함수
 │   │   ├── init.ts
-│   │   └── movie.ts
-│   ├── libs                     # 유틸리티 모음
-│   │   ├── api-gateway.ts       # response 생성 유틸 
-│   │   ├── database.ts          # 데이터베이스 연결 등의 유틸
-│   │   ├── fakeData.ts          # 더미데이터
-│   │   ├── handler-resolver.ts  # 파일 경로 유틸
-│   │   └── lambda.ts            # 미들웨어 연결 유틸
-│   ├── middleware               # 미들웨어 디렉터리
+│   │   ├── movieCreate.ts
+│   │   ├── movieDelete.ts
+│   │   ├── movieListRead.ts
+│   │   ├── movieRead.ts
+│   │   └── movieUpdate.ts
+│   ├── libs                    # 유틸리티
+│   │   ├── apiGateway.ts       # response 생성 유틸 
+│   │   ├── database.ts         # 데이터베이스 연결 등의 유틸
+│   │   ├── handlerResolver.ts  # 파일 경로 유틸
+│   │   └── lambda.ts           # 미들웨어 연결 유틸
+│   ├── middleware              # 미들웨어 디렉터리
 │   │   ├── errorHandler.ts
 │   │   ├── sqliteConnector.ts
 │   │   └── validator.ts
-│   ├── model
-│   │   └── movie.ts             # 데이터베이스 모델
-│   ├── query                    # 데이터 조작 쿼리와 로직 디렉터리
-│   │   ├── movie.ts             # movie 데이터 조작 쿼리 및 로직
-│   │   └── reset.ts             # 데이터베이스 테이블 생성 쿼리 및 로직
-│   ├── schema                   # 검증을 위한 스키마 파일
+│   ├── model                   # 데이터베이스 모델
 │   │   └── movie.ts
-│   └── handlers.ts              # api 경로와 함수 매칭
+│   ├── query                   # 데이터베이스 조작 쿼리 등의 로직
+│   │   ├── movie.ts
+│   │   └── reset.ts
+│   └── handlers.ts             # API 경로와 함수 매칭 파일
+├── README.md
 ├── package.json
-├── serverless.ts                # serverless 프레임워크 설정 파일
+├── serverless.ts               # serverless 프레임워크 설정 파일
 ├── tsconfig.json
 ├── tsconfig.paths.json
 └── yarn.lock
