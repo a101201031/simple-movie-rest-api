@@ -1,4 +1,4 @@
-# Junior back-end assignment - movie api
+# simple movie rest api
 
 ***Movie CRUD API***
 
@@ -6,7 +6,7 @@
 
 ## 빌드
 
-- 터미널에서 `git clone https://github.com/a101201031/ticketplace-test [디렉터리명]`으로 프로젝트 파일을 다운받습니다.
+- 터미널에서 `git clone https://github.com/a101201031/simple-movie-rest-api [디렉터리명]`으로 프로젝트 파일을 다운받습니다.
 - `nvm`을 사용중일 경우
   - `cd [디렉터리명]` 후 `nvm install`으로 node version을 동일하게 합니다.
 - `nvm`을 사용하지 않을 경우
